@@ -1,233 +1,30 @@
-// Database storage (using localStorage for persistence)
+// ═══════════════════════════════════════════════════════════════
+//          CHIEF AI - SAMBANOVA API INTEGRATION
+//          Production-Ready Dynamic Recipe Generation
+//          Created by Fusion - Swaraj Nerlekar & Claude AI
+// ═══════════════════════════════════════════════════════════════
+
+// Database storage
 let feedbackDatabase = JSON.parse(localStorage.getItem('feedbackDB')) || [];
 let recipeDatabase = JSON.parse(localStorage.getItem('recipeDB')) || [];
 let currentRecipe = null;
 
-// Recipe database with detailed recipes for popular dishes
-const recipeTemplates = {
-    "butter chicken": {
-        name: "Butter Chicken",
-        ingredients: [
-            "🍗 Chicken - 500g (boneless, cut into pieces)",
-            "🧂 Salt - to taste",
-            "🌶️ Red chili powder - 1 tsp",
-            "🧄 Garlic paste - 1 tbsp",
-            "🧅 Ginger paste - 1 tbsp",
-            "🍅 Tomato puree - 2 cups",
-            "🧈 Butter - 4 tbsp",
-            "🥛 Fresh cream - 1/2 cup",
-            "🥄 Garam masala - 1 tsp",
-            "🌿 Kasuri methi - 1 tsp",
-            "🥄 Cooking oil - 2 tbsp",
-            "🍯 Honey - 1 tsp (optional)"
-        ],
-        instructions: [
-            "Marinate chicken with salt, red chili powder, ginger-garlic paste for 30 minutes",
-            "Heat oil in a pan and cook marinated chicken until golden brown",
-            "In another pan, melt 2 tbsp butter and add tomato puree",
-            "Add garam masala, kasuri methi, and salt to the tomato mixture",
-            "Let it simmer for 10 minutes until the gravy thickens",
-            "Add the cooked chicken pieces to the gravy",
-            "Add fresh cream and remaining butter",
-            "Mix well and cook for 5 more minutes",
-            "Garnish with cream and serve hot with naan or rice"
-        ],
-        tips: [
-            "Don't overcook the chicken - it should be tender and juicy",
-            "Use fresh cream for the best flavor",
-            "Kasuri methi gives it the authentic restaurant taste",
-            "Add a pinch of sugar if the tomatoes are too tangy"
-        ]
-    },
-    "egg masala": {
-        name: "Egg Masala",
-        ingredients: [
-            "🥚 Eggs - 4 (boiled and peeled)",
-            "🧅 Onions - 2 large (finely chopped)",
-            "🍅 Tomatoes - 3 medium (chopped)",
-            "🧄 Garlic - 6 cloves (minced)",
-            "🌶️ Green chilies - 2 (chopped)",
-            "🥄 Oil - 3 tbsp",
-            "🧂 Salt - to taste",
-            "🌶️ Red chili powder - 1 tsp",
-            "🥄 Turmeric powder - 1/2 tsp",
-            "🥄 Coriander powder - 1 tsp",
-            "🥄 Garam masala - 1/2 tsp",
-            "🌿 Fresh coriander - for garnish"
-        ],
-        instructions: [
-            "Cut boiled eggs in half and set aside",
-            "Heat oil in a pan and add chopped onions",
-            "Sauté until golden brown, then add garlic and green chilies",
-            "Add chopped tomatoes and cook until they become soft",
-            "Add all the spices (turmeric, chili powder, coriander powder, salt)",
-            "Cook the masala until oil separates from the sides",
-            "Add 1 cup of water and bring to a boil",
-            "Gently add the egg halves to the gravy",
-            "Sprinkle garam masala and simmer for 5 minutes",
-            "Garnish with fresh coriander and serve hot"
-        ],
-        tips: [
-            "Don't overcook eggs - 10 minutes of boiling is perfect",
-            "Make small cuts on the eggs so they absorb the flavors",
-            "Cook the onion-tomato base well for rich flavor",
-            "Adjust spice levels according to your taste"
-        ]
-    },
-    "pasta": {
-        name: "Classic Italian Pasta",
-        ingredients: [
-            "🍝 Pasta - 300g (penne or spaghetti)",
-            "🍅 Tomatoes - 4 large (chopped)",
-            "🧄 Garlic - 5 cloves (minced)",
-            "🧅 Onion - 1 medium (chopped)",
-            "🫒 Olive oil - 3 tbsp",
-            "🌿 Fresh basil - 10-12 leaves",
-            "🧂 Salt - to taste",
-            "🌶️ Black pepper - 1/2 tsp",
-            "🧀 Parmesan cheese - for topping",
-            "🌶️ Red chili flakes - 1/2 tsp (optional)"
-        ],
-        instructions: [
-            "Boil pasta in salted water until al dente (8-10 minutes)",
-            "Drain and set aside, reserve 1 cup of pasta water",
-            "Heat olive oil in a large pan",
-            "Add garlic and onion, sauté until fragrant",
-            "Add chopped tomatoes and cook until they break down",
-            "Season with salt, pepper, and chili flakes",
-            "Add cooked pasta to the sauce",
-            "Toss well, adding pasta water if needed for consistency",
-            "Add fresh basil leaves and mix",
-            "Serve hot with grated parmesan cheese on top"
-        ],
-        tips: [
-            "Don't overcook pasta - it should be firm to bite",
-            "Save some pasta water - it helps bind the sauce",
-            "Fresh basil adds amazing flavor - don't skip it",
-            "Toss pasta in the sauce, don't just pour sauce on top"
-        ]
-    },
-    "biryani": {
-        name: "Chicken Biryani",
-        ingredients: [
-            "🍗 Chicken - 500g (cut into pieces)",
-            "🍚 Basmati rice - 2 cups",
-            "🧅 Onions - 3 large (sliced)",
-            "🍅 Tomatoes - 2 medium (chopped)",
-            "🥛 Yogurt - 1 cup",
-            "🧄 Ginger-garlic paste - 2 tbsp",
-            "🌶️ Green chilies - 4 (slit)",
-            "🌿 Mint leaves - 1/2 cup",
-            "🌿 Coriander leaves - 1/2 cup",
-            "🥄 Biryani masala - 2 tbsp",
-            "🧂 Salt - to taste",
-            "🥄 Ghee - 4 tbsp",
-            "💛 Saffron - a pinch (soaked in milk)",
-            "🥄 Bay leaves - 2",
-            "🌰 Whole spices - (cinnamon, cardamom, cloves)"
-        ],
-        instructions: [
-            "Marinate chicken with yogurt, ginger-garlic paste, biryani masala, and salt for 1 hour",
-            "Boil rice with whole spices until 70% cooked, drain and set aside",
-            "Heat ghee in a heavy-bottomed pot and fry onions until golden brown",
-            "Remove half the onions and set aside for garnish",
-            "Add marinated chicken and cook until half done",
-            "Add tomatoes, mint, and coriander leaves",
-            "Layer the partially cooked rice over the chicken",
-            "Top with fried onions and saffron milk",
-            "Cover with a tight lid and cook on low heat (dum) for 20-25 minutes",
-            "Gently mix and serve hot with raita"
-        ],
-        tips: [
-            "Don't fully cook the rice initially - it will cook more during dum",
-            "Keep the flame very low during dum cooking",
-            "Use good quality basmati rice for best results",
-            "The key is in the layering and slow cooking"
-        ]
-    },
-    "pizza": {
-        name: "Margherita Pizza",
-        ingredients: [
-            "🍞 Pizza dough - 1 ball (or pre-made base)",
-            "🍅 Tomato sauce - 1 cup",
-            "🧀 Mozzarella cheese - 200g (shredded)",
-            "🍅 Fresh tomatoes - 2 (sliced)",
-            "🌿 Fresh basil - 10-12 leaves",
-            "🧄 Garlic - 2 cloves (minced)",
-            "🫒 Olive oil - 2 tbsp",
-            "🧂 Salt - to taste",
-            "🌶️ Black pepper - 1/2 tsp",
-            "🥄 Dried oregano - 1 tsp"
-        ],
-        instructions: [
-            "Preheat oven to 220°C (425°F)",
-            "Roll out pizza dough into a circle on a floured surface",
-            "Spread tomato sauce evenly, leaving 1 inch border",
-            "Sprinkle minced garlic over the sauce",
-            "Add shredded mozzarella cheese generously",
-            "Arrange fresh tomato slices on top",
-            "Drizzle with olive oil and season with salt and pepper",
-            "Bake for 12-15 minutes until crust is golden and cheese is bubbly",
-            "Remove from oven and immediately add fresh basil leaves",
-            "Sprinkle oregano and serve hot"
-        ],
-        tips: [
-            "Use fresh mozzarella for authentic taste",
-            "Don't overload with toppings - less is more for Margherita",
-            "Add basil after baking to keep it fresh",
-            "A pizza stone gives the best crispy crust"
-        ]
-    }
-};
+// ═══════════════════════════════════════════════════════════════
+//          SAMBANOVA API CONFIGURATION
+// ═══════════════════════════════════════════════════════════════
+// Add your SambaNova API key here:
 
-// Enhanced recipe generator with smart matching
-function generateSmartRecipe(dishName) {
-    const lowerDish = dishName.toLowerCase().trim();
-    
-    // Check for exact matches or partial matches
-    for (let key in recipeTemplates) {
-        if (lowerDish.includes(key) || key.includes(lowerDish)) {
-            return recipeTemplates[key];
-        }
-    }
-    
-    // Generate generic recipe for unknown dishes
-    return {
-        name: dishName.charAt(0).toUpperCase() + dishName.slice(1),
-        ingredients: [
-            "🧂 Salt - to taste",
-            "🌶️ Red chili powder - 1 tsp",
-            "🧄 Garlic - 4-5 cloves (minced)",
-            "🧅 Onion - 2 medium (chopped)",
-            "🍅 Tomato - 3 medium (chopped)",
-            "🥄 Cooking oil - 3 tbsp",
-            "🌿 Fresh coriander - for garnish",
-            "🌶️ Green chilies - 2 (optional)",
-            "🥄 Garam masala - 1 tsp",
-            "🥄 Turmeric powder - 1/2 tsp"
-        ],
-        instructions: [
-            "Heat oil in a pan over medium heat",
-            "Add chopped onions and sauté until golden brown",
-            "Add minced garlic and green chilies, cook for 1 minute",
-            "Add chopped tomatoes and cook until soft and mushy",
-            "Add all the spice powders and salt, mix well",
-            "Add your main ingredients and mix thoroughly",
-            "Add water as needed and cook covered for 15-20 minutes",
-            "Simmer until the desired consistency is reached",
-            "Garnish with fresh coriander and serve hot"
-        ],
-        tips: [
-            "Cook on low heat for better flavor development",
-            "Fresh ingredients always give the best taste",
-            "Adjust spices according to your preference",
-            "Don't add too much water - it can make the dish watery",
-            "Let it simmer - patience is key to great cooking!"
-        ]
-    };
-}
+const SAMBANOVA_API_KEY = 'YOUR_SAMBANOVA_API_KEY'; // 👈 Replace with your actual key
+const SAMBANOVA_API_URL = 'https://api.sambanova.ai/v1/chat/completions';
 
-// Search button event
+// ⚠️ SECURITY NOTE:
+// For production, move this to a backend/serverless function
+// See SECURITY_GUIDE.txt for proper implementation
+
+// ═══════════════════════════════════════════════════════════════
+//          SEARCH FUNCTIONALITY
+// ═══════════════════════════════════════════════════════════════
+
 document.getElementById('searchBtn').addEventListener('click', () => {
     const query = document.getElementById('recipeSearch').value.trim();
     if (query) {
@@ -237,49 +34,316 @@ document.getElementById('searchBtn').addEventListener('click', () => {
     }
 });
 
-// Enter key support
 document.getElementById('recipeSearch').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
         document.getElementById('searchBtn').click();
     }
 });
 
-// Search recipe
+// ═══════════════════════════════════════════════════════════════
+//          MAIN SEARCH FUNCTION
+// ═══════════════════════════════════════════════════════════════
+
 async function searchRecipe(dishName) {
-    // Hide recipe and feedback sections
+    // Hide sections
     document.getElementById('recipeSection').classList.add('hidden');
     document.getElementById('feedbackSection').classList.add('hidden');
     
-    // Show loading animation
+    // Show loading
     document.getElementById('loadingAnimation').classList.remove('hidden');
     
-    // Simulate loading time
-    setTimeout(() => {
-        // Generate recipe
-        const recipe = generateSmartRecipe(dishName);
-        currentRecipe = recipe;
-        displayRecipe(recipe, dishName);
+    try {
+        // Check cache first
+        const cachedRecipe = getCachedRecipe(dishName);
+        if (cachedRecipe) {
+            console.log('✅ Using cached recipe');
+            setTimeout(() => {
+                currentRecipe = cachedRecipe;
+                displayRecipe(cachedRecipe, dishName);
+                showRecipeSections();
+            }, 1500);
+            return;
+        }
+
+        // Generate recipe using SambaNova AI
+        console.log('🤖 Generating recipe with SambaNova AI...');
+        const recipe = await generateRecipeWithSambaNova(dishName);
         
-        // Save to recipe database
-        recipeDatabase.push({
-            id: recipeDatabase.length + 1,
-            name: dishName,
-            recipe: recipe,
-            timestamp: new Date().toISOString()
+        if (recipe) {
+            currentRecipe = recipe;
+            displayRecipe(recipe, dishName);
+            
+            // Save to database
+            saveRecipeToDatabase(dishName, recipe);
+            
+            showRecipeSections();
+        } else {
+            throw new Error('Failed to generate recipe');
+        }
+        
+    } catch (error) {
+        console.error('❌ Error:', error);
+        alert('Sorry, there was an error generating the recipe. Please try again!');
+        document.getElementById('loadingAnimation').classList.add('hidden');
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//          SAMBANOVA AI INTEGRATION
+// ═══════════════════════════════════════════════════════════════
+
+async function generateRecipeWithSambaNova(dishName) {
+    // Check if API key is configured
+    if (SAMBANOVA_API_KEY === 'YOUR_SAMBANOVA_API_KEY') {
+        console.error('❌ SambaNova API key not configured!');
+        alert('Please add your SambaNova API key in main.js (line 17)');
+        return null;
+    }
+
+    try {
+        const prompt = createRecipePrompt(dishName);
+        
+        const response = await fetch(SAMBANOVA_API_URL, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${SAMBANOVA_API_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'Meta-Llama-3.1-8B-Instruct', // SambaNova's model
+                messages: [
+                    {
+                        role: 'system',
+                        content: 'You are a professional chef and cooking expert. You provide detailed, authentic recipes with proper measurements and clear instructions.'
+                    },
+                    {
+                        role: 'user',
+                        content: prompt
+                    }
+                ],
+                temperature: 0.7,
+                max_tokens: 2000
+            })
         });
-        localStorage.setItem('recipeDB', JSON.stringify(recipeDatabase));
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('API Error:', errorData);
+            throw new Error(`API Error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
+        }
+
+        const data = await response.json();
+        console.log('✅ SambaNova Response received');
         
-        // Hide loading and show recipe
+        // Extract recipe from response
+        const recipeText = data.choices[0].message.content;
+        const recipe = parseRecipeFromAI(recipeText, dishName);
+        
+        return recipe;
+        
+    } catch (error) {
+        console.error('❌ SambaNova API Error:', error);
+        throw error;
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//          PROMPT ENGINEERING
+// ═══════════════════════════════════════════════════════════════
+
+function createRecipePrompt(dishName) {
+    return `Please provide a detailed recipe for "${dishName}". 
+
+Format your response EXACTLY like this (use this exact structure):
+
+RECIPE NAME:
+[Name of the dish]
+
+INGREDIENTS:
+- [Ingredient 1 with quantity]
+- [Ingredient 2 with quantity]
+- [etc.]
+
+INSTRUCTIONS:
+1. [Step 1]
+2. [Step 2]
+3. [etc.]
+
+TIPS:
+- [Tip 1]
+- [Tip 2]
+- [etc.]
+
+Requirements:
+- Use proper measurements (cups, tbsp, tsp, grams, etc.)
+- Include ALL necessary ingredients
+- Provide clear, step-by-step instructions
+- Add helpful cooking tips
+- Be specific and detailed
+- Make it authentic and delicious!`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//          PARSE AI RESPONSE
+// ═══════════════════════════════════════════════════════════════
+
+function parseRecipeFromAI(text, dishName) {
+    const recipe = {
+        name: dishName,
+        ingredients: [],
+        instructions: [],
+        tips: []
+    };
+
+    try {
+        // Extract recipe name
+        const nameMatch = text.match(/RECIPE NAME:\s*\n(.+)/i);
+        if (nameMatch) {
+            recipe.name = nameMatch[1].trim();
+        }
+
+        // Extract ingredients
+        const ingredientsMatch = text.match(/INGREDIENTS:\s*\n([\s\S]*?)(?=\n\nINSTRUCTIONS:|INSTRUCTIONS:)/i);
+        if (ingredientsMatch) {
+            const ingredientsText = ingredientsMatch[1];
+            recipe.ingredients = ingredientsText
+                .split('\n')
+                .filter(line => line.trim().startsWith('-') || line.trim().match(/^\d+\./))
+                .map(line => {
+                    const cleaned = line.replace(/^[-\d.]\s*/, '').trim();
+                    const emoji = getIngredientEmoji(cleaned);
+                    return `${emoji} ${cleaned}`;
+                });
+        }
+
+        // Extract instructions
+        const instructionsMatch = text.match(/INSTRUCTIONS:\s*\n([\s\S]*?)(?=\n\nTIPS:|TIPS:)/i);
+        if (instructionsMatch) {
+            const instructionsText = instructionsMatch[1];
+            recipe.instructions = instructionsText
+                .split('\n')
+                .filter(line => line.trim().match(/^\d+\./))
+                .map(line => line.replace(/^\d+\.\s*/, '').trim());
+        }
+
+        // Extract tips
+        const tipsMatch = text.match(/TIPS:\s*\n([\s\S]*?)$/i);
+        if (tipsMatch) {
+            const tipsText = tipsMatch[1];
+            recipe.tips = tipsText
+                .split('\n')
+                .filter(line => line.trim().startsWith('-') || line.trim().match(/^\d+\./))
+                .map(line => line.replace(/^[-\d.]\s*/, '').trim());
+        }
+
+        // Validate recipe
+        if (recipe.ingredients.length === 0) {
+            throw new Error('No ingredients found');
+        }
+        if (recipe.instructions.length === 0) {
+            throw new Error('No instructions found');
+        }
+
+        console.log('✅ Recipe parsed successfully:', recipe);
+        return recipe;
+
+    } catch (error) {
+        console.error('❌ Error parsing recipe:', error);
+        // Return a basic valid recipe structure
+        return {
+            name: dishName,
+            ingredients: ['🥄 See full recipe in AI response'],
+            instructions: text.split('\n').filter(l => l.trim()),
+            tips: ['Please try searching again for better results']
+        };
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//          HELPER FUNCTIONS
+// ═══════════════════════════════════════════════════════════════
+
+function getIngredientEmoji(ingredient) {
+    const ing = ingredient.toLowerCase();
+    
+    // Proteins
+    if (ing.includes('chicken')) return '🍗';
+    if (ing.includes('egg')) return '🥚';
+    if (ing.includes('fish')) return '🐟';
+    if (ing.includes('shrimp') || ing.includes('prawn')) return '🦐';
+    if (ing.includes('meat') || ing.includes('beef')) return '🥩';
+    if (ing.includes('pork')) return '🥓';
+    
+    // Vegetables
+    if (ing.includes('tomato')) return '🍅';
+    if (ing.includes('onion')) return '🧅';
+    if (ing.includes('garlic')) return '🧄';
+    if (ing.includes('potato')) return '🥔';
+    if (ing.includes('carrot')) return '🥕';
+    if (ing.includes('broccoli')) return '🥦';
+    if (ing.includes('pepper') || ing.includes('bell pepper')) return '🫑';
+    if (ing.includes('chili') || ing.includes('chilli')) return '🌶️';
+    
+    // Grains & Pasta
+    if (ing.includes('rice')) return '🍚';
+    if (ing.includes('pasta') || ing.includes('noodle') || ing.includes('spaghetti')) return '🍝';
+    if (ing.includes('bread')) return '🍞';
+    
+    // Dairy
+    if (ing.includes('milk') || ing.includes('cream')) return '🥛';
+    if (ing.includes('cheese')) return '🧀';
+    if (ing.includes('butter') || ing.includes('ghee')) return '🧈';
+    if (ing.includes('yogurt') || ing.includes('curd')) return '🥛';
+    
+    // Seasonings
+    if (ing.includes('salt')) return '🧂';
+    if (ing.includes('sugar') || ing.includes('honey')) return '🍯';
+    
+    // Oils & Fats
+    if (ing.includes('oil') || ing.includes('olive')) return '🫒';
+    
+    // Herbs & Spices
+    if (ing.includes('basil') || ing.includes('herb') || ing.includes('coriander') || ing.includes('parsley')) return '🌿';
+    if (ing.includes('lemon') || ing.includes('lime')) return '🍋';
+    
+    // Nuts & Seeds
+    if (ing.includes('nut') || ing.includes('almond') || ing.includes('cashew')) return '🌰';
+    
+    // Default
+    return '🥄';
+}
+
+function getCachedRecipe(dishName) {
+    const cached = recipeDatabase.find(r => 
+        r.name.toLowerCase().trim() === dishName.toLowerCase().trim()
+    );
+    return cached ? cached.recipe : null;
+}
+
+function saveRecipeToDatabase(dishName, recipe) {
+    recipeDatabase.push({
+        id: recipeDatabase.length + 1,
+        name: dishName,
+        recipe: recipe,
+        timestamp: new Date().toISOString()
+    });
+    localStorage.setItem('recipeDB', JSON.stringify(recipeDatabase));
+    console.log('💾 Recipe saved to database');
+}
+
+function showRecipeSections() {
+    setTimeout(() => {
         document.getElementById('loadingAnimation').classList.add('hidden');
         document.getElementById('recipeSection').classList.remove('hidden');
         document.getElementById('feedbackSection').classList.remove('hidden');
-        
-        // Scroll to recipe
         document.getElementById('recipeSection').scrollIntoView({ behavior: 'smooth' });
-    }, 3000);
+    }, 2000);
 }
 
-// Display recipe
+// ═══════════════════════════════════════════════════════════════
+//          DISPLAY RECIPE
+// ═══════════════════════════════════════════════════════════════
+
 function displayRecipe(recipe, dishName) {
     document.getElementById('recipeName').textContent = recipe.name || dishName;
     
@@ -311,7 +375,10 @@ function displayRecipe(recipe, dishName) {
     });
 }
 
-// AI-like responses for feedback
+// ═══════════════════════════════════════════════════════════════
+//          FEEDBACK SYSTEM
+// ═══════════════════════════════════════════════════════════════
+
 function generateAIResponse(feedback, recipeName) {
     const lowerFeedback = feedback.toLowerCase();
     
@@ -334,32 +401,26 @@ function generateAIResponse(feedback, recipeName) {
     }
 }
 
-// Send feedback
 document.getElementById('sendFeedback').addEventListener('click', async () => {
     const feedback = document.getElementById('userFeedback').value.trim();
     if (!feedback) return;
     
-    // Display user message
     const chatMessages = document.getElementById('chatMessages');
     const userMsg = document.createElement('div');
     userMsg.className = 'user-message';
     userMsg.innerHTML = `<p>${feedback}</p>`;
     chatMessages.appendChild(userMsg);
     
-    // Clear input
     document.getElementById('userFeedback').value = '';
     
-    // Generate AI response
     setTimeout(() => {
         const aiResponse = generateAIResponse(feedback, currentRecipe?.name || 'recipe');
         
-        // Display AI response
         const aiMsg = document.createElement('div');
         aiMsg.className = 'ai-message';
         aiMsg.innerHTML = `<p>${aiResponse}</p>`;
         chatMessages.appendChild(aiMsg);
         
-        // Save to database
         feedbackDatabase.push({
             id: feedbackDatabase.length + 1,
             recipe: currentRecipe?.name || 'Unknown',
@@ -369,15 +430,15 @@ document.getElementById('sendFeedback').addEventListener('click', async () => {
         });
         localStorage.setItem('feedbackDB', JSON.stringify(feedbackDatabase));
         
-        // Update stats
         updateDatabaseStats();
-        
-        // Scroll to bottom
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }, 1000);
 });
 
-// Database toggle
+// ═══════════════════════════════════════════════════════════════
+//          DATABASE FUNCTIONS
+// ═══════════════════════════════════════════════════════════════
+
 document.getElementById('toggleDatabase').addEventListener('click', () => {
     document.getElementById('databaseViewer').classList.remove('hidden');
     loadDatabase();
@@ -387,18 +448,13 @@ document.getElementById('closeDatabase').addEventListener('click', () => {
     document.getElementById('databaseViewer').classList.add('hidden');
 });
 
-// Load and display database
 function loadDatabase() {
     const tbody = document.getElementById('databaseBody');
     tbody.innerHTML = '';
     
     if (feedbackDatabase.length === 0) {
         const row = document.createElement('tr');
-        row.innerHTML = `
-            <td colspan="5" style="text-align: center; padding: 30px;">
-                No feedback yet! Try searching for a recipe and share your cooking experience.
-            </td>
-        `;
+        row.innerHTML = `<td colspan="5" style="text-align: center; padding: 30px;">No feedback yet! Try searching for a recipe and share your cooking experience.</td>`;
         tbody.appendChild(row);
     } else {
         feedbackDatabase.forEach(entry => {
@@ -417,13 +473,11 @@ function loadDatabase() {
     updateDatabaseStats();
 }
 
-// Update database stats
 function updateDatabaseStats() {
     document.getElementById('totalFeedback').textContent = feedbackDatabase.length;
     document.getElementById('totalRecipes').textContent = recipeDatabase.length;
 }
 
-// Initialize stats on load
 updateDatabaseStats();
 
 // Check for dish selection from dishes page
@@ -432,9 +486,16 @@ window.addEventListener('DOMContentLoaded', () => {
     if (selectedDish) {
         document.getElementById('recipeSearch').value = selectedDish;
         sessionStorage.removeItem('selectedDish');
-        // Trigger search after a short delay
         setTimeout(() => {
             document.getElementById('searchBtn').click();
         }, 500);
     }
 });
+
+// ═══════════════════════════════════════════════════════════════
+//          CONSOLE BRANDING
+// ═══════════════════════════════════════════════════════════════
+
+console.log('%c🚀 Chief AI - Powered by SambaNova 🚀', 'font-size: 20px; color: #ffd700; font-weight: bold;');
+console.log('%c✨ Created by Fusion - Swaraj Nerlekar & Claude AI ✨', 'font-size: 14px; color: #4ecdc4;');
+console.log('%cMaking AI Powerful and Accessible!', 'font-size: 12px; color: #ff6b6b;');

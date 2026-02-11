@@ -14,7 +14,7 @@ let currentRecipe = null;
 // ═══════════════════════════════════════════════════════════════
 // Add your SambaNova API key here:
 
-const SAMBANOVA_API_KEY = 'YOUR_SAMBANOVA_API_KEY'; // 👈 Replace with your actual key
+const SAMBANOVA_API_KEY = '3a411ff1-d943-492b-832e-c1d6eecb878f'; // 👈 Replace with your actual key
 const SAMBANOVA_API_URL = 'https://api.sambanova.ai/v1/chat/completions';
 
 // ⚠️ SECURITY NOTE:

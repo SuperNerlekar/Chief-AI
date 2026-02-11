@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chief AI - Fusion by Swaraj Nerlekar ✨</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Sparkle Effect */
+        .sparkle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkleAnim 1.5s ease-out forwards;
+            z-index: 9999;
+        }
+
+        @keyframes sparkleAnim {
+            0% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0) translateY(-100px);
+            }
+        }
+
+        /* Floating Background Shapes */
+        .bg-decoration {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .float-shape {
+            position: absolute;
+            opacity: 0.08;
+            animation: floatRandom 20s ease-in-out infinite;
+        }
+
+        .shape1 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, #ffd700, transparent);
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape2 {
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, #ff6b6b, transparent);
+            top: 60%;
+            right: 15%;
+            animation-delay: 3s;
+        }
+
+        .shape3 {
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, #4ecdc4, transparent);
+            bottom: 25%;
+            left: 20%;
+            animation-delay: 6s;
+        }
+
+        @keyframes floatRandom {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            33% {
+                transform: translate(50px, -30px) rotate(120deg);
+            }
+            66% {
+                transform: translate(-30px, 50px) rotate(240deg);
+            }
+        }
+
+        /* Success Notification */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: -400px;
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.95), rgba(68, 160, 141, 0.95));
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 10000;
+            transition: right 0.5s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .notification.show {
+            right: 30px;
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification-icon {
+            font-size: 30px;
+        }
+
+        .notification-text {
+            font-size: 16px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Decorations -->
+    <div class="bg-decoration">
+        <div class="float-shape shape1"></div>
+        <div class="float-shape shape2"></div>
+        <div class="float-shape shape3"></div>
+    </div>
+
+    <!-- Success Notification -->
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <span class="notification-icon">✅</span>
+            <div>
+                <div class="notification-text">Recipe Generated Successfully!</div>
+                <div style="font-size: 13px; opacity: 0.9;">Scroll down to view your recipe</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="f-logo-nav">F</span>
+                <span class="logo-text">Fusion</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link active">Home</a></li>
+                <li><a href="dishes.html" class="nav-link">Dishes</a></li>
+                <li><a href="about.html" class="nav-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Header with Title Box -->
+    <header class="header-box">
+        <div class="logo-container">
+            <div class="f-logo">F</div>
+            <div class="title-text">
+                <h1 class="main-title">Chief AI</h1>
+                <p class="subtitle">Fusion - A Project By Swaraj Nerlekar</p>
+            </div>
+        </div>
+        <div class="fusion-badge">
+            <span class="fusion-text">Fusion</span>
+            <span class="credits">by Swaraj Nerlekar and Claude AI</span>
+        </div>
+    </header>
+
+    <!-- Main Hero Section -->
+    <section class="hero-section">
+        <div class="dancing-title">
+            <h2 class="chief-ai-main">Chief AI</h2>
+            <p class="by-fusion">By Fusion</p>
+        </div>
+        <p class="welcome-text">Welcome to the world of cooking ✨</p>
+    </section>
+
+    <!-- AI Search Bar Section -->
+    <section class="search-section">
+        <div class="search-container">
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    id="recipeSearch" 
+                    placeholder="🔍 Type any dish... (e.g., butter chicken, pasta, biryani)"
+                    autocomplete="off"
+                />
+                <button id="searchBtn" class="search-btn">
+                    <span class="search-icon">🍳</span>
+                    <span class="btn-text">Get Recipe</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Animation -->
+    <div id="loadingAnimation" class="loading-container hidden">
+        <div class="cooking-utensils">
+            <span class="utensil">🍳</span>
+            <span class="utensil">🔪</span>
+            <span class="utensil">🥄</span>
+            <span class="utensil">🍲</span>
+        </div>
+        <p class="loading-text">Your dish is being ready... ✨</p>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+    </div>
+
+    <!-- Recipe Display Section -->
+    <section id="recipeSection" class="recipe-section hidden">
+        <div class="recipe-container">
+            <h2 id="recipeName" class="recipe-name"></h2>
+            
+            <!-- Ingredients -->
+            <div class="ingredients-section">
+                <h3 class="section-title">🥘 Ingredients</h3>
+                <ul id="ingredientsList" class="ingredients-list"></ul>
+            </div>
+
+            <!-- Instructions -->
+            <div class="instructions-section">
+                <h3 class="section-title">👨‍🍳 Instructions</h3>
+                <ol id="instructionsList" class="instructions-list"></ol>
+            </div>
+
+            <!-- Important Tips -->
+            <div class="tips-section">
+                <h3 class="section-title">⚠️ Important Tips</h3>
+                <ul id="tipsList" class="tips-list"></ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feedback Chat Section -->
+    <section id="feedbackSection" class="feedback-section hidden">
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="ai-avatar">🤖</div>
+                <h3>How was your cooking experience?</h3>
+            </div>
+            <div id="chatMessages" class="chat-messages">
+                <div class="ai-message">
+                    <p>Hi! I'm your AI cooking assistant. How did the recipe turn out? Please share your experience! 😊</p>
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <input 
+                    type="text" 
+                    id="userFeedback" 
+                    placeholder="💬 Share your experience with the recipe..."
+                    class="chat-input"
+                />
+                <button id="sendFeedback" class="send-btn">Send</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Database Viewer -->
+    <section class="database-section">
+        <button id="toggleDatabase" class="db-toggle-btn">📊 View User Feedback Database</button>
+        <div id="databaseViewer" class="database-viewer hidden">
+            <div class="db-header">
+                <h3>📊 User Feedback Database</h3>
+                <button id="closeDatabase" class="close-db-btn">✕</button>
+            </div>
+            <div class="db-stats">
+                <div class="stat-box">
+                    <span class="stat-value" id="totalFeedback">0</span>
+                    <span class="stat-label">Total Feedbacks</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-value" id="totalRecipes">0</span>
+                    <span class="stat-label">Recipes Generated</span>
+                </div>
+            </div>
+            <table class="db-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Recipe</th>
+                        <th>User Feedback</th>
+                        <th>AI Response</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody id="databaseBody">
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Meet Your Virtual Chief -->
+    <section class="virtual-chief-section">
+        <div class="chief-container">
+            <div class="chief-avatar-container">
+                <div class="chief-avatar">👨‍🍳</div>
+                <div class="waving-hand">👋</div>
+            </div>
+            <h2 class="chief-title">Meet Your Virtual Chief</h2>
+            <h3 class="chief-name">"Apex"</h3>
+            <p class="chief-intro">Hello! I'm Apex, your AI-powered cooking companion. Ready to help you create amazing dishes! 🌟</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <span class="f-logo-footer">F</span>
+                <span class="footer-brand">Fusion</span>
+            </div>
+            <p class="footer-tagline">A Project Making AI Powerful ⚡</p>
+            <p class="footer-credits">Website Created by Fusion</p>
+            <p class="footer-copyright">© 2026 Fusion - Swaraj Nerlekar & Claude AI</p>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script>
+        // Sparkle effect on mouse move
+        let lastSparkle = 0;
+        document.addEventListener('mousemove', (e) => {
+            const now = Date.now();
+            if (now - lastSparkle > 50) { // Throttle sparkles
+                createSparkle(e.clientX, e.clientY);
+                lastSparkle = now;
+            }
+        });
+
+        function createSparkle(x, y) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = x + 'px';
+            sparkle.style.top = y + 'px';
+            sparkle.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
+            document.body.appendChild(sparkle);
+            
+            setTimeout(() => sparkle.remove(), 1500);
+        }
+
+        // Show notification when recipe is generated
+        function showNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 4000);
+        }
+
+        // Add to your search function
+        const originalSearchBtn = document.getElementById('searchBtn');
+        originalSearchBtn.addEventListener('click', () => {
+            const query = document.getElementById('recipeSearch').value.trim();
+            if (query) {
+                setTimeout(() => {
+                    showNotification();
+                }, 3000); // Show after loading completes
+            }
+        });
+
+        // Smooth scroll to recipe
+        function smoothScrollToRecipe() {
+            document.getElementById('recipeSection').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // Add parallax effect to background shapes
+        document.addEventListener('mousemove', (e) => {
+            const shapes = document.querySelectorAll('.float-shape');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            shapes.forEach((shape, index) => {
+                const speed = (index + 1) * 20;
+                const moveX = (x - 0.5) * speed;
+                const moveY = (y - 0.5) * speed;
+                shape.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+        });
+
+        // Add typing effect sound (visual feedback)
+        const searchInput = document.getElementById('recipeSearch');
+        searchInput.addEventListener('input', function() {
+            this.style.transform = 'scale(1.02)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 100);
+        });
+
+        // Add enter key animation
+        document.getElementById('recipeSearch').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const btn = document.getElementById('searchBtn');
+                btn.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    btn.style.transform = 'scale(1)';
+                }, 150);
+            }
+        });
+
+        // Add confetti effect when recipe loads
+        function createConfetti() {
+            const colors = ['#ffd700', '#ff6b6b', '#4ecdc4', '#fff'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.position = 'fixed';
+                    confetti.style.width = '10px';
+                    confetti.style.height = '10px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.left = Math.random() * window.innerWidth + 'px';
+                    confetti.style.top = '-20px';
+                    confetti.style.borderRadius = '50%';
+                    confetti.style.pointerEvents = 'none';
+                    confetti.style.zIndex = '9999';
+                    confetti.style.animation = 'confettiFall 3s ease-out forwards';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 30);
+            }
+        }
+
+        // Add confetti animation CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes confettiFall {
+                to {
+                    transform: translateY(${window.innerHeight}px) rotate(${Math.random() * 360}deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

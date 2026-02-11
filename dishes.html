@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Suggested Dishes - Chief AI ✨</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .dishes-hero {
+            text-align: center;
+            padding: 80px 20px 50px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .dishes-title {
+            font-size: 80px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textShine 3s ease infinite, pulse 2s ease-in-out infinite;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 8px 30px rgba(255, 215, 0, 0.6));
+        }
+        
+        .dishes-subtitle {
+            font-size: 26px;
+            color: rgba(255, 255, 255, 0.9);
+            animation: fadeGlow 2s ease-in-out infinite;
+        }
+        
+        .dishes-grid {
+            max-width: 1250px;
+            margin: 50px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .dish-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+            backdrop-filter: blur(15px);
+            border: 3px solid rgba(255, 255, 255, 0.25);
+            border-radius: 25px;
+            padding: 35px;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dish-card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+        }
+
+        .dish-card:hover::before {
+            transform: rotate(45deg) translateX(100%);
+        }
+        
+        .dish-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.5);
+            border-color: rgba(255, 215, 0, 0.6);
+        }
+        
+        .dish-icon {
+            font-size: 90px;
+            margin-bottom: 25px;
+            animation: bounce 2s ease-in-out infinite;
+            filter: drop-shadow(0 8px 25px rgba(255, 215, 0, 0.5));
+            position: relative;
+            z-index: 2;
+        }
+        
+        .dish-card:nth-child(1) .dish-icon { animation-delay: 0s; }
+        .dish-card:nth-child(2) .dish-icon { animation-delay: 0.2s; }
+        .dish-card:nth-child(3) .dish-icon { animation-delay: 0.4s; }
+        .dish-card:nth-child(4) .dish-icon { animation-delay: 0.6s; }
+        .dish-card:nth-child(5) .dish-icon { animation-delay: 0.8s; }
+        .dish-card:nth-child(6) .dish-icon { animation-delay: 1s; }
+        .dish-card:nth-child(7) .dish-icon { animation-delay: 1.2s; }
+        .dish-card:nth-child(8) .dish-icon { animation-delay: 1.4s; }
+        .dish-card:nth-child(9) .dish-icon { animation-delay: 1.6s; }
+        
+        .dish-name {
+            font-size: 30px;
+            font-weight: 800;
+            background: linear-gradient(45deg, #ffd700, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .dish-description {
+            font-size: 17px;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 20px;
+            line-height: 1.7;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .dish-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .tag {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 215, 0, 0.15));
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #ffd700;
+            font-weight: 700;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            background: rgba(255, 215, 0, 0.35);
+            transform: scale(1.05);
+        }
+        
+        .try-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ffd700, #ff6b6b);
+            background-size: 200% 200%;
+            animation: buttonGradient 3s ease infinite;
+            border: none;
+            border-radius: 30px;
+            padding: 16px 30px;
+            color: white;
+            font-weight: 700;
+            font-size: 17px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.4);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .try-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(255, 107, 107, 0.6);
+        }
+        
+        .ai-suggestion {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.15), rgba(68, 160, 141, 0.15));
+            border: 3px solid rgba(78, 205, 196, 0.4);
+            border-radius: 25px;
+            padding: 30px;
+            max-width: 850px;
+            margin: 50px auto 30px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .ai-suggestion p {
+            font-size: 19px;
+            color: rgba(255, 255, 255, 0.95);
+            line-height: 1.8;
+        }
+        
+        .ai-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            padding: 12px 28px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 20px rgba(78, 205, 196, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Floating Background Shapes */
+        .bg-decoration {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .float-shape {
+            position: absolute;
+            opacity: 0.08;
+            animation: floatRandom 20s ease-in-out infinite;
+        }
+
+        .shape1 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, #ffd700, transparent);
+            top: 15%;
+            left: 5%;
+        }
+
+        .shape2 {
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, #ff6b6b, transparent);
+            top: 50%;
+            right: 10%;
+            animation-delay: 3s;
+        }
+
+        .shape3 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, #4ecdc4, transparent);
+            bottom: 20%;
+            left: 15%;
+            animation-delay: 6s;
+        }
+
+        .shape4 {
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, #ffd700, transparent);
+            bottom: 40%;
+            right: 20%;
+            animation-delay: 9s;
+        }
+
+        @keyframes floatRandom {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(50px, -30px) rotate(120deg); }
+            66% { transform: translate(-30px, 50px) rotate(240deg); }
+        }
+
+        /* Scroll animations */
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dish-card {
+            animation: slideUpFade 0.6s ease-out backwards;
+        }
+
+        .dish-card:nth-child(1) { animation-delay: 0.1s; }
+        .dish-card:nth-child(2) { animation-delay: 0.2s; }
+        .dish-card:nth-child(3) { animation-delay: 0.3s; }
+        .dish-card:nth-child(4) { animation-delay: 0.4s; }
+        .dish-card:nth-child(5) { animation-delay: 0.5s; }
+        .dish-card:nth-child(6) { animation-delay: 0.6s; }
+        .dish-card:nth-child(7) { animation-delay: 0.7s; }
+        .dish-card:nth-child(8) { animation-delay: 0.8s; }
+        .dish-card:nth-child(9) { animation-delay: 0.9s; }
+    </style>
+</head>
+<body>
+    <!-- Background Decorations -->
+    <div class="bg-decoration">
+        <div class="float-shape shape1"></div>
+        <div class="float-shape shape2"></div>
+        <div class="float-shape shape3"></div>
+        <div class="float-shape shape4"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="f-logo-nav">F</span>
+                <span class="logo-text">Fusion</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="dishes.html" class="nav-link active">Dishes</a></li>
+                <li><a href="about.html" class="nav-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="dishes-hero">
+        <h1 class="dishes-title">AI-Suggested Dishes</h1>
+        <p class="dishes-subtitle">✨ Curated by our intelligent cooking assistant ✨</p>
+    </section>
+
+    <!-- AI Suggestion Box -->
+    <div class="ai-suggestion">
+        <span class="ai-badge">🤖 AI Powered</span>
+        <p>These dishes have been carefully selected by our AI to offer you a perfect mix of flavors, 
+        difficulty levels, and cuisines. Click any dish to get the full recipe instantly! 🍳</p>
+    </div>
+
+    <!-- Dishes Grid -->
+    <div class="dishes-grid">
+        <!-- Dish 1 -->
+        <div class="dish-card" onclick="searchDish('Butter Chicken')">
+            <div class="dish-icon">🍗</div>
+            <h3 class="dish-name">Butter Chicken</h3>
+            <p class="dish-description">Creamy, rich North Indian curry with tender chicken in a tomato-based gravy</p>
+            <div class="dish-tags">
+                <span class="tag">🔥 Medium Spice</span>
+                <span class="tag">⏱️ 45 min</span>
+                <span class="tag">🇮🇳 Indian</span>
+            </div>
+            <button class="try-btn">Get Recipe ✨</button>
+        </div>
+
+        <!-- Dish 2 -->
+        <div class="dish-card" onclick="searchDish('Spaghetti Carbonara')">
+            <div class="dish-icon">🍝</div>
+            <h3 class="dish-name">Spaghetti Carbonara</h3>
+            <p class="dish-description">Classic Italian pasta with creamy egg sauce, crispy pancetta, and parmesan</p>
+            <div class="dish-tags">
+                <span class="tag">😌 Mild</span>
+                <span class="tag">⏱️ 20 min</span>
+                <span class="tag">🇮🇹 Italian</span>
+            </div>
+            <button class="try-btn">Get Recipe ✨</button>
+        </div>
+
+        <!-- Dish 3 -->
+        <div class="dish-card" onclick="searchDish('Pad Thai')">
+            <div class="dish-icon">🍜</div>
+            <h3 class="dish-name">Pad Thai</h3>
+            <p class="dish-description">Thailand's famous stir-fried noodles with shrimp, peanuts, and tangy sauce</p>
+            <div class="dish-tags">
+                <span class="tag">🔥 Medium Spice</span>
+                <span class="tag">⏱️ 30 min</span>
+                <span class="tag">🇹🇭 Thai</span>
+            </div>
+            <button class="try-btn">Get Recipe ✨</button>
+        </div>
+
+        <!-- Dish 4 -->
+        <div class="dish-card" onclick="searchDish('Chicken Biryani')">
+            <div class="dish-icon">🍛</div>
+            <h3 class="dish-name">Chicken Biryani</h3>
+            <p class="dish-description">Aromatic basmati rice layered with spiced chicken, herbs, and saffron</p>
+            <div class="dish-tags">
+                <span class="tag">🔥 Spicy</span>
+                <span class="tag">⏱️ 60 min</span>
+                <span class="tag">🇮🇳 Indian</span>
+            </div>
+            <button class="try-btn">Get Recipe ✨</button>
+        </div>
+
+        <!-- Dish 5 -->
+        <div class="dish-card" onclick="searchDish('Margherita Pizza')">
+            <div class="dish-icon">🍕</div>
+            <h3 class="dish-name">Margherita Pizza</h3>
+            <p class="dish-description">Simple yet delicious pizza with fresh mozzarella, tomatoes, and basil</p>
+            <div class="dish-tags">
+                <span class="tag">😌 Mild</span>
+                <span class="tag">⏱️ 35 min</span>
+                <span class="tag">🇮🇹 Italian</span>
+            </div>
+            <button class="try-btn">Get Recipe ✨</button>
+        </div>
+
+        <!-- Dish 6 -->
+        <div class="dish-card" onclick="searchDish('Chocolate Lava Cake')">
+            <div class="dish-icon">🍰</div>
+            <h3 class="dish-name">Chocolate Lava Cake</h3>
+            <p class="dish-description">Decadent dessert with a gooey molten chocolate center</p>
+            <div class="dish-tags">
+                <span class="tag">🍫 Dessert</span>
+                <span class="tag">⏱️ 25 min</span>
+                <span class="tag">🇫🇷 French</span>
+            </div>
+            <button class="try-btn">Get Recipe ✨</button>
+        </div>
+
+        <!-- Dish 7 -->
+        <div class="dish-card" onclick="searchDish('Greek Salad')">
+            <div class="dish-icon">🥗</div>
+            <h3 class="dish-name">Greek Salad</h3>
+            <p class="dish-description">Fresh and healthy salad with feta cheese, olives, and crisp vegetables</p>
+            <div class="dish-tags">
+                <span class="tag">🥬 Healthy</span>
+                <span class="tag">⏱️ 15 min</span>
+                <span class="tag">🇬🇷 Greek</span>
+            </div>
+            <button class="try-btn">Get Recipe ✨</button>
+        </div>
+
+        <!-- Dish 8 -->
+        <div class="dish-card" onclick="searchDish('Tacos al Pastor')">
+            <div class="dish-icon">🌮</div>
+            <h3 class="dish-name">Tacos al Pastor</h3>
+            <p class="dish-description">Mexican street food with marinated pork, pineapple, and fresh toppings</p>
+            <div class="dish-tags">
+                <span class="tag">🔥 Medium Spice</span>
+                <span class="tag">⏱️ 40 min</span>
+                <span class="tag">🇲🇽 Mexican</span>
+            </div>
+            <button class="try-btn">Get Recipe ✨</button>
+        </div>
+
+        <!-- Dish 9 -->
+        <div class="dish-card" onclick="searchDish('Japanese Ramen')">
+            <div class="dish-icon">🍲</div>
+            <h3 class="dish-name">Japanese Ramen</h3>
+            <p class="dish-description">Rich broth with noodles, soft-boiled egg, and savory toppings</p>
+            <div class="dish-tags">
+                <span class="tag">🍜 Comfort Food</span>
+                <span class="tag">⏱️ 50 min</span>
+                <span class="tag">🇯🇵 Japanese</span>
+            </div>
+            <button class="try-btn">Get Recipe ✨</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <span class="f-logo-footer">F</span>
+                <span class="footer-brand">Fusion</span>
+            </div>
+            <p class="footer-tagline">A Project Making AI Powerful ⚡</p>
+            <p class="footer-credits">Website Created by Fusion</p>
+            <p class="footer-copyright">© 2026 Fusion - Swaraj Nerlekar & Claude AI</p>
+        </div>
+    </footer>
+
+    <script>
+        function searchDish(dishName) {
+            // Save the dish name to sessionStorage
+            sessionStorage.setItem('selectedDish', dishName);
+            // Redirect to home page
+            window.location.href = 'index.html';
+        }
+
+        // Add click animation
+        document.querySelectorAll('.dish-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+
+        // Parallax effect on mouse move
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.dish-card');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            cards.forEach((card, index) => {
+                const speed = (index % 3 + 1) * 5;
+                const moveX = (x - 0.5) * speed;
+                const moveY = (y - 0.5) * speed;
+                card.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
